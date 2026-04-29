@@ -24,7 +24,7 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
   void initState() {
     super.initState();
     futureArticles = NewsApiService.fetchArticlesByCategory(widget.category);
-    futureSources = NewsApiService.fetchSources();
+    futureSources = NewsApiService.fetchSources(category: widget.category);
   }
 
   String _getTimeAgo(DateTime publishedDate) {

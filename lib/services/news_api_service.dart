@@ -95,7 +95,7 @@ class NewsApiService {
     }
   }
 
-  static Future<List<NewsSource>> fetchSources() async {
+  static Future<List<NewsSource>> fetchSources({String? category}) async {
     try {
       final String url = '$baseUrl/top-headlines/sources?apiKey=$apiKey';
 
@@ -105,7 +105,19 @@ class NewsApiService {
         final json = jsonDecode(response.body);
         final sources = json['sources'] as List;
 
-        return sources.map((source) => NewsSource.fromJson(source)).toList();
+        List<NewsSource> allSources = sources
+            .map((source) => NewsSource.fromJson(source))
+            .toList();
+
+        // Filter by category if provided
+        if (category != null) {
+          final categoryValue = categoryMap[category] ?? category.toLowerCase();
+          allSources = allSources
+              .where((source) => source.category == categoryValue)
+              .toList();
+        }
+
+        return allSources;
       } else {
         throw Exception('Failed to load sources');
       }
