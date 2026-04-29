@@ -266,6 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 category: 'General',
                 imagePath: 'assets/svgimages/general.svg',
                 isImageLeft: true,
+
                 onTap: () => _navigateToCategory('General'),
               ),
               const SizedBox(height: 16),
@@ -391,7 +392,7 @@ class NewsCard extends StatelessWidget {
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -427,7 +428,7 @@ class NewsCard extends StatelessWidget {
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                                  color: Colors.black,
                                 ),
                               ),
                               const SizedBox(height: 10),
