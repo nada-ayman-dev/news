@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:news/model/home/news_article.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:news/view/article/article_full_screen.dart';
 
 class ArticleDetailScreen extends StatelessWidget {
   final NewsArticle article;
@@ -128,29 +128,16 @@ class ArticleDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Full Article Description
-                  Text(
-                    article.description,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      height: 1.6,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
                   // View Full Article Button
                   GestureDetector(
-                    onTap: () async {
-                      if (article.url.isNotEmpty) {
-                        final Uri uri = Uri.parse(article.url);
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(
-                            uri,
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      }
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ArticleFullScreen(article: article),
+                        ),
+                      );
                     },
                     child: Container(
                       width: double.infinity,
