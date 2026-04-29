@@ -7,6 +7,7 @@ import 'package:news/view/article/article_detail_screen.dart';
 import 'package:news/providers/language_provider.dart';
 import 'package:news/providers/theme_provider.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 class SearchArticlesScreen extends StatefulWidget {
   const SearchArticlesScreen({super.key});
@@ -21,9 +22,23 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
   Future<List<NewsSource>>? _futureSources;
   String? _selectedSourceId;
   String _lastQuery = '';
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Real-time timestamp updates every 10 seconds
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
 
   @override
   void dispose() {
+    _timer.cancel();
     _searchController.dispose();
     super.dispose();
   }

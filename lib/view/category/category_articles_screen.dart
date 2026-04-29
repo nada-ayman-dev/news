@@ -8,6 +8,7 @@ import 'package:news/view/search/search_articles_screen.dart';
 import 'package:news/providers/language_provider.dart';
 import 'package:news/providers/theme_provider.dart';
 import 'package:intl/intl.dart';
+import 'dart:async';
 
 class CategoryArticlesScreen extends StatefulWidget {
   final String category;
@@ -22,12 +23,26 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
   late Future<List<NewsArticle>> futureArticles;
   late Future<List<NewsSource>> futureSources;
   String? selectedSourceId;
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     futureArticles = NewsApiService.fetchArticlesByCategory(widget.category);
     futureSources = NewsApiService.fetchSources(category: widget.category);
+
+    // Real-time timestamp updates every 10 seconds
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   String _getTimeAgo(DateTime publishedDate) {
