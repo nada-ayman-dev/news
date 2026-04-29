@@ -23,7 +23,7 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
   late Future<List<NewsArticle>> futureArticles;
   late Future<List<NewsSource>> futureSources;
   String? selectedSourceId;
-  late Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     super.dispose();
   }
 

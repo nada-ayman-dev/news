@@ -22,7 +22,7 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
   Future<List<NewsSource>>? _futureSources;
   String? _selectedSourceId;
   String _lastQuery = '';
-  late Timer _timer;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
 
   @override
   void dispose() {
-    _timer.cancel();
+    _timer?.cancel();
     _searchController.dispose();
     super.dispose();
   }
