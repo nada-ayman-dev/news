@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-import 'package:news/providers/language_provider.dart';
 import 'package:news/model/home/news_article.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ArticleDetailScreen extends StatelessWidget {
   final NewsArticle article;
@@ -129,19 +128,9 @@ class ArticleDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Full Article Content (Placeholder)
+                  // Full Article Description
                   Text(
-                    'Full Article Content',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                    'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. '
-                    'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
+                    article.description,
                     style: const TextStyle(
                       fontSize: 14,
                       height: 1.6,
@@ -150,32 +139,36 @@ class ArticleDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
 
-                  // Share Button
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[600],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.share, color: Colors.white),
-                        const SizedBox(width: 8),
-                        Consumer<LanguageProvider>(
-                          builder: (context, languageProvider, child) {
-                            return Text(
-                              languageProvider.isArabic ? 'شارك' : 'Share',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            );
-                          },
+                  // View Full Article Button
+                  GestureDetector(
+                    onTap: () async {
+                      if (article.url.isNotEmpty) {
+                        final Uri uri = Uri.parse(article.url);
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(
+                            uri,
+                            mode: LaunchMode.externalApplication,
+                          );
+                        }
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'View Full Article',
+                          style: const TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
