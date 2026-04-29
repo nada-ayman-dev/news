@@ -319,12 +319,16 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                         const SizedBox(height: 16),
                         Text(
                           'Error searching articles',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(color: Colors.white),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           snapshot.error.toString(),
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -345,7 +349,9 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                         const SizedBox(height: 16),
                         Text(
                           'No articles found for "$_lastQuery"',
-                          style: Theme.of(context).textTheme.bodyLarge,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -513,7 +519,7 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.black,
+                                              color: Colors.white,
                                             ),
                                           ),
                                           const SizedBox(height: 8),
@@ -528,7 +534,7 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                                                       TextOverflow.ellipsis,
                                                   style: const TextStyle(
                                                     fontSize: 12,
-                                                    color: Colors.grey,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
                                               ),
@@ -538,7 +544,7 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                                                 ),
                                                 style: const TextStyle(
                                                   fontSize: 12,
-                                                  color: Colors.grey,
+                                                  color: Colors.white,
                                                 ),
                                               ),
                                             ],

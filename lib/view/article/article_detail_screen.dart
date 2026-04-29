@@ -80,7 +80,7 @@ class ArticleDetailScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -102,14 +102,14 @@ class ArticleDetailScreen extends StatelessWidget {
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                           ),
                           Text(
                             '${article.publishedDate.day} ${_getMonthName(article.publishedDate.month)} ${article.publishedDate.year}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[600],
+                              color: Colors.white,
                             ),
                           ),
                         ],
@@ -124,7 +124,7 @@ class ArticleDetailScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       height: 1.6,
-                      color: Colors.black87,
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -134,6 +134,7 @@ class ArticleDetailScreen extends StatelessWidget {
                     'Full Article Content',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 12),

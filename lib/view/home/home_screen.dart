@@ -244,12 +244,20 @@ class _HomeScreenState extends State<HomeScreen> {
               // Good Morning Section
               const Text(
                 'Good Morning',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(height: 8),
               const Text(
                 'Here is Some News For You',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                ),
               ),
               const SizedBox(height: 24),
 
@@ -383,7 +391,7 @@ class NewsCard extends StatelessWidget {
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -419,7 +427,7 @@ class NewsCard extends StatelessWidget {
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
                               const SizedBox(height: 10),

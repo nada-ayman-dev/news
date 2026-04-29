@@ -272,12 +272,16 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
                   const SizedBox(height: 16),
                   Text(
                     'Error loading articles',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyLarge?.copyWith(color: Colors.white),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     snapshot.error.toString(),
-                    style: Theme.of(context).textTheme.bodySmall,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.white),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -287,7 +291,9 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
             return Center(
               child: Text(
                 'No articles found',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: Colors.white),
               ),
             );
           }
@@ -447,7 +453,7 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
                                       style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: Colors.white,
                                       ),
                                     ),
                                     const SizedBox(height: 8),
@@ -462,7 +468,7 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
                                               fontSize: 12,
-                                              color: Colors.grey,
+                                              color: Colors.white,
                                             ),
                                           ),
                                         ),
@@ -470,7 +476,7 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
                                           _getTimeAgo(article.publishedDate),
                                           style: const TextStyle(
                                             fontSize: 12,
-                                            color: Colors.grey,
+                                            color: Colors.white,
                                           ),
                                         ),
                                       ],
