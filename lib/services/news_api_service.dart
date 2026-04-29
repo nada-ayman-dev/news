@@ -40,8 +40,8 @@ class NewsApiService {
                 title: article['title'] ?? 'No Title',
                 description: article['description'] ?? 'No Description',
                 imagePath: article['urlToImage'] ?? '',
-                publishedDate: DateTime.parse(
-                  article['publishedAt'] ?? DateTime.now().toString(),
+                publishedDate: _parseUtcDate(
+                  article['publishedAt'] ?? DateTime.now().toUtc().toString(),
                 ),
                 author:
                     article['author'] ?? article['source']['name'] ?? 'Unknown',
@@ -77,8 +77,8 @@ class NewsApiService {
                 title: article['title'] ?? 'No Title',
                 description: article['description'] ?? 'No Description',
                 imagePath: article['urlToImage'] ?? '',
-                publishedDate: DateTime.parse(
-                  article['publishedAt'] ?? DateTime.now().toString(),
+                publishedDate: _parseUtcDate(
+                  article['publishedAt'] ?? DateTime.now().toUtc().toString(),
                 ),
                 author:
                     article['author'] ?? article['source']['name'] ?? 'Unknown',
@@ -92,6 +92,19 @@ class NewsApiService {
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  static DateTime _parseUtcDate(String dateString) {
+    try {
+      final utcDate = DateTime.parse(dateString);
+      // If the string contains 'Z', it's already UTC
+      if (dateString.contains('Z')) {
+        return utcDate.toLocal();
+      }
+      return utcDate;
+    } catch (e) {
+      return DateTime.now();
     }
   }
 
