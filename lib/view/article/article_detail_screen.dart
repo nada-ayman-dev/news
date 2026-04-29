@@ -7,8 +7,7 @@ import 'package:news/model/home/news_article.dart';
 class ArticleDetailScreen extends StatelessWidget {
   final NewsArticle article;
 
-  const ArticleDetailScreen({Key? key, required this.article})
-    : super(key: key);
+  const ArticleDetailScreen({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {

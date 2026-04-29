@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:news/providers/language_provider.dart';
 import 'package:news/providers/theme_provider.dart';
-import 'package:news/model/home/news_article.dart';
-import 'package:news/view/article/article_detail_screen.dart';
+import 'package:news/view/category/category_articles_screen.dart';
+import 'package:news/view/search/search_articles_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,91 +14,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // Sample articles for each category
-  late List<NewsArticle> articles;
-
-  @override
-  void initState() {
-    super.initState();
-    articles = [
-      NewsArticle(
-        id: '1',
-        category: 'General',
-        title: 'Breaking News Today',
-        description:
-            'Stay updated with the latest general news stories from around the world.',
-        imagePath: 'assets/svgimages/general.svg',
-        publishedDate: DateTime.now(),
-        author: 'John Doe',
-      ),
-      NewsArticle(
-        id: '2',
-        category: 'Business',
-        title: 'Stock Market Reaches New Heights',
-        description:
-            'Global markets show strong performance as investors gain confidence in economic growth.',
-        imagePath: 'assets/svgimages/business.svg',
-        publishedDate: DateTime.now().subtract(const Duration(hours: 2)),
-        author: 'Jane Smith',
-      ),
-      NewsArticle(
-        id: '3',
-        category: 'Sports',
-        title: 'Championship Finals Tomorrow',
-        description:
-            'Teams prepare for the biggest match of the season with unprecedented excitement.',
-        imagePath: 'assets/svgimages/sports.svg',
-        publishedDate: DateTime.now().subtract(const Duration(hours: 4)),
-        author: 'Mike Johnson',
-      ),
-      NewsArticle(
-        id: '4',
-        category: 'Technology',
-        title: 'AI Breakthroughs Announced',
-        description:
-            'Major tech companies announce revolutionary advances in artificial intelligence and machine learning.',
-        imagePath: 'assets/svgimages/technology.svg',
-        publishedDate: DateTime.now().subtract(const Duration(hours: 1)),
-        author: 'Sarah Wilson',
-      ),
-      NewsArticle(
-        id: '5',
-        category: 'Entertainment',
-        title: 'Awards Show Highlights',
-        description:
-            'Celebrities gather for the annual awards celebration with stunning performances and surprises.',
-        imagePath: 'assets/svgimages/entertainment.svg',
-        publishedDate: DateTime.now().subtract(const Duration(hours: 3)),
-        author: 'Emma Brown',
-      ),
-      NewsArticle(
-        id: '6',
-        category: 'Health',
-        title: 'New Medical Discoveries',
-        description:
-            'Scientists announce breakthrough in treatment of common health conditions with promising results.',
-        imagePath: 'assets/svgimages/health.svg',
-        publishedDate: DateTime.now().subtract(const Duration(hours: 5)),
-        author: 'Dr. Robert Lee',
-      ),
-      NewsArticle(
-        id: '7',
-        category: 'Science',
-        title: 'Space Exploration Milestone',
-        description:
-            'Space agencies report major achievements in research and preparation for future missions.',
-        imagePath: 'assets/svgimages/science.svg',
-        publishedDate: DateTime.now().subtract(const Duration(hours: 6)),
-        author: 'Prof. Lisa Anderson',
-      ),
-    ];
-  }
-
-  void _navigateToArticle(NewsArticle article) {
+  void _navigateToCategory(String category) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ArticleDetailScreen(article: article),
+        builder: (context) => CategoryArticlesScreen(category: category),
       ),
     );
   }
@@ -133,7 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchArticlesScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -216,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 8),
                         DropdownButtonFormField<ThemeMode>(
-                          value: themeProvider.themeMode,
+                          initialValue: themeProvider.themeMode,
                           items: const [
                             DropdownMenuItem(
                               value: ThemeMode.dark,
@@ -280,7 +207,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(height: 8),
                         DropdownButtonFormField<String>(
-                          value: languageProvider.currentLocale.languageCode,
+                          initialValue:
+                              languageProvider.currentLocale.languageCode,
                           items: const [
                             DropdownMenuItem(
                               value: 'en',
@@ -330,8 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 category: 'General',
                 imagePath: 'assets/svgimages/general.svg',
                 isImageLeft: true,
-                article: articles[0],
-                onTap: () => _navigateToArticle(articles[0]),
+                onTap: () => _navigateToCategory('General'),
               ),
               const SizedBox(height: 16),
 
@@ -340,8 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 category: 'Business',
                 imagePath: 'assets/svgimages/business.svg',
                 isImageLeft: false,
-                article: articles[1],
-                onTap: () => _navigateToArticle(articles[1]),
+                onTap: () => _navigateToCategory('Business'),
               ),
               const SizedBox(height: 16),
 
@@ -350,8 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 category: 'Sports',
                 imagePath: 'assets/svgimages/sports.svg',
                 isImageLeft: true,
-                article: articles[2],
-                onTap: () => _navigateToArticle(articles[2]),
+                onTap: () => _navigateToCategory('Sports'),
               ),
               const SizedBox(height: 16),
 
@@ -360,8 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 category: 'Technology',
                 imagePath: 'assets/svgimages/technology.svg',
                 isImageLeft: false,
-                article: articles[3],
-                onTap: () => _navigateToArticle(articles[3]),
+                onTap: () => _navigateToCategory('Technology'),
               ),
               const SizedBox(height: 16),
 
@@ -370,8 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 category: 'Entertainment',
                 imagePath: 'assets/svgimages/entertainment.svg',
                 isImageLeft: true,
-                article: articles[4],
-                onTap: () => _navigateToArticle(articles[4]),
+                onTap: () => _navigateToCategory('Entertainment'),
               ),
               const SizedBox(height: 16),
 
@@ -380,8 +303,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 category: 'Health',
                 imagePath: 'assets/svgimages/health.svg',
                 isImageLeft: false,
-                article: articles[5],
-                onTap: () => _navigateToArticle(articles[5]),
+                onTap: () => _navigateToCategory('Health'),
               ),
               const SizedBox(height: 16),
 
@@ -390,8 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 category: 'Science',
                 imagePath: 'assets/svgimages/science.svg',
                 isImageLeft: true,
-                article: articles[6],
-                onTap: () => _navigateToArticle(articles[6]),
+                onTap: () => _navigateToCategory('Science'),
               ),
               const SizedBox(height: 16),
             ],
@@ -407,17 +328,15 @@ class NewsCard extends StatelessWidget {
   final String category;
   final String imagePath;
   final bool isImageLeft;
-  final NewsArticle article;
   final VoidCallback? onTap;
 
   const NewsCard({
-    Key? key,
+    super.key,
     required this.category,
     required this.imagePath,
     required this.isImageLeft,
-    required this.article,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

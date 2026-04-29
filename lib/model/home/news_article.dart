@@ -6,6 +6,8 @@ class NewsArticle {
   final String imagePath;
   final DateTime publishedDate;
   final String author;
+  final String content;
+  final String url;
 
   NewsArticle({
     required this.id,
@@ -15,6 +17,8 @@ class NewsArticle {
     required this.imagePath,
     required this.publishedDate,
     required this.author,
+    this.content = '',
+    this.url = '',
   });
 
   factory NewsArticle.fromJson(Map<String, dynamic> json) {
@@ -28,6 +32,8 @@ class NewsArticle {
         json['publishedDate'] ?? DateTime.now().toString(),
       ),
       author: json['author'] ?? '',
+      content: json['content'] ?? '',
+      url: json['url'] ?? '',
     );
   }
 
@@ -40,6 +46,8 @@ class NewsArticle {
       'imagePath': imagePath,
       'publishedDate': publishedDate.toIso8601String(),
       'author': author,
+      'content': content,
+      'url': url,
     };
   }
 }
