@@ -16,12 +16,14 @@ class CategoryArticlesScreen extends StatefulWidget {
 
 class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
   late Future<List<NewsArticle>> futureArticles;
+  late Future<List<String>> futureSources;
   String? selectedSource;
 
   @override
   void initState() {
     super.initState();
     futureArticles = NewsApiService.fetchArticlesByCategory(widget.category);
+    futureSources = NewsApiService.fetchSources();
   }
 
   String _getTimeAgo(DateTime publishedDate) {
@@ -38,14 +40,6 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
     } else {
       return DateFormat('MMM d, yyyy').format(publishedDate);
     }
-  }
-
-  List<String> _extractSources(List<NewsArticle> articles) {
-    final sources = <String>{};
-    for (var article in articles) {
-      sources.add(article.author);
-    }
-    return sources.toList();
   }
 
   List<NewsArticle> _filterArticlesBySource(
@@ -89,8 +83,8 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
           ),
         ],
       ),
-      body: FutureBuilder<List<NewsArticle>>(
-        future: futureArticles,
+      body: FutureBuilder<List<dynamic>>(
+        future: Future.wait([futureArticles, futureSources]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -123,8 +117,8 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
             );
           }
 
-          final articles = snapshot.data!;
-          final sources = _extractSources(articles);
+          final articles = snapshot.data![0] as List<NewsArticle>;
+          final availableSources = snapshot.data![1] as List<String>;
           final filteredArticles = _filterArticlesBySource(
             articles,
             selectedSource,
@@ -164,7 +158,7 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
                         ),
                       ),
                       // Individual source chips
-                      ...sources.map((source) {
+                      ...availableSources.map((source) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4),
                           child: FilterChip(
@@ -188,7 +182,7 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
                             ),
                           ),
                         );
-                      }).toList(),
+                      }),
                     ],
                   ),
                 ),

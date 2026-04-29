@@ -14,6 +14,7 @@ class SearchArticlesScreen extends StatefulWidget {
 class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
   final TextEditingController _searchController = TextEditingController();
   Future<List<NewsArticle>>? _futureArticles;
+  Future<List<String>>? _futureSources;
   String? _selectedSource;
   String _lastQuery = '';
 
@@ -37,14 +38,6 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
     } else {
       return DateFormat('MMM d, yyyy').format(publishedDate);
     }
-  }
-
-  List<String> _extractSources(List<NewsArticle> articles) {
-    final sources = <String>{};
-    for (var article in articles) {
-      sources.add(article.author);
-    }
-    return sources.toList();
   }
 
   List<NewsArticle> _filterArticlesBySource(
@@ -134,8 +127,11 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                 ],
               ),
             )
-          : FutureBuilder<List<NewsArticle>>(
-              future: _futureArticles,
+          : FutureBuilder<List<dynamic>>(
+              future: Future.wait([
+                _futureArticles!,
+                _futureSources ?? NewsApiService.fetchSources(),
+              ]),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -159,7 +155,9 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                       ],
                     ),
                   );
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                } else if (!snapshot.hasData ||
+                    snapshot.data!.isEmpty ||
+                    (snapshot.data![0] as List<NewsArticle>).isEmpty) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -180,8 +178,8 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                   );
                 }
 
-                final articles = snapshot.data!;
-                final sources = _extractSources(articles);
+                final articles = snapshot.data![0] as List<NewsArticle>;
+                final availableSources = snapshot.data![1] as List<String>;
                 final filteredArticles = _filterArticlesBySource(
                   articles,
                   _selectedSource,
@@ -223,7 +221,7 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                               ),
                             ),
                             // Individual source chips
-                            ...sources.map((source) {
+                            ...availableSources.map((source) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 4,
@@ -251,7 +249,7 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                                   ),
                                 ),
                               );
-                            }).toList(),
+                            }),
                           ],
                         ),
                       ),

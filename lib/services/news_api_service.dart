@@ -93,4 +93,23 @@ class NewsApiService {
       rethrow;
     }
   }
+
+  static Future<List<String>> fetchSources() async {
+    try {
+      final String url = '$baseUrl/top-headlines/sources?apiKey=$apiKey';
+
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        final sources = json['sources'] as List;
+
+        return sources.map((source) => source['name'] as String).toList();
+      } else {
+        throw Exception('Failed to load sources');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
