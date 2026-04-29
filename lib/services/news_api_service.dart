@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:news/model/home/news_article.dart';
+import 'package:news/model/home/news_source.dart';
 
 class NewsApiService {
   static const String apiKey = '0df7ec81584647518dd94c374ff7b165';
@@ -94,7 +95,7 @@ class NewsApiService {
     }
   }
 
-  static Future<List<String>> fetchSources() async {
+  static Future<List<NewsSource>> fetchSources() async {
     try {
       final String url = '$baseUrl/top-headlines/sources?apiKey=$apiKey';
 
@@ -104,7 +105,7 @@ class NewsApiService {
         final json = jsonDecode(response.body);
         final sources = json['sources'] as List;
 
-        return sources.map((source) => source['name'] as String).toList();
+        return sources.map((source) => NewsSource.fromJson(source)).toList();
       } else {
         throw Exception('Failed to load sources');
       }

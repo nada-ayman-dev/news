@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news/model/home/news_article.dart';
+import 'package:news/model/home/news_source.dart';
 import 'package:news/services/news_api_service.dart';
 import 'package:news/view/article/article_detail_screen.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +15,8 @@ class SearchArticlesScreen extends StatefulWidget {
 class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
   final TextEditingController _searchController = TextEditingController();
   Future<List<NewsArticle>>? _futureArticles;
-  Future<List<String>>? _futureSources;
-  String? _selectedSource;
+  Future<List<NewsSource>>? _futureSources;
+  String? _selectedSourceId;
   String _lastQuery = '';
 
   @override
@@ -42,10 +43,10 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
 
   List<NewsArticle> _filterArticlesBySource(
     List<NewsArticle> articles,
-    String? source,
+    String? sourceName,
   ) {
-    if (source == null) return articles;
-    return articles.where((article) => article.author == source).toList();
+    if (sourceName == null) return articles;
+    return articles.where((article) => article.author == sourceName).toList();
   }
 
   void _performSearch(String query) {
@@ -59,7 +60,7 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
     setState(() {
       _futureArticles = NewsApiService.searchArticles(query);
       _lastQuery = query;
-      _selectedSource = null;
+      _selectedSourceId = null;
     });
   }
 
@@ -179,10 +180,24 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                 }
 
                 final articles = snapshot.data![0] as List<NewsArticle>;
-                final availableSources = snapshot.data![1] as List<String>;
+                final sources = snapshot.data![1] as List<NewsSource>;
+                final selectedSourceName = sources
+                    .firstWhere(
+                      (s) => s.id == _selectedSourceId,
+                      orElse: () => NewsSource(
+                        id: '',
+                        name: '',
+                        description: '',
+                        url: '',
+                        category: '',
+                        language: '',
+                        country: '',
+                      ),
+                    )
+                    .name;
                 final filteredArticles = _filterArticlesBySource(
                   articles,
-                  _selectedSource,
+                  selectedSourceName.isEmpty ? null : selectedSourceName,
                 );
 
                 return Column(
@@ -205,47 +220,50 @@ class _SearchArticlesScreenState extends State<SearchArticlesScreen> {
                               ),
                               child: FilterChip(
                                 label: const Text('All'),
-                                selected: _selectedSource == null,
+                                selected: _selectedSourceId == null,
                                 onSelected: (selected) {
                                   setState(() {
-                                    _selectedSource = null;
+                                    _selectedSourceId = null;
                                   });
                                 },
                                 backgroundColor: Colors.white,
                                 selectedColor: Colors.black87,
                                 labelStyle: TextStyle(
-                                  color: _selectedSource == null
+                                  color: _selectedSourceId == null
                                       ? Colors.white
                                       : Colors.black,
                                 ),
                               ),
                             ),
                             // Individual source chips
-                            ...availableSources.map((source) {
+                            ...sources.map((source) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 4,
                                 ),
-                                child: FilterChip(
-                                  label: Text(
-                                    source.length > 20
-                                        ? '${source.substring(0, 20)}...'
-                                        : source,
-                                  ),
-                                  selected: _selectedSource == source,
-                                  onSelected: (selected) {
-                                    setState(() {
-                                      _selectedSource = selected
-                                          ? source
-                                          : null;
-                                    });
-                                  },
-                                  backgroundColor: Colors.white,
-                                  selectedColor: Colors.black87,
-                                  labelStyle: TextStyle(
-                                    color: _selectedSource == source
-                                        ? Colors.white
-                                        : Colors.black,
+                                child: Tooltip(
+                                  message: source.description,
+                                  child: FilterChip(
+                                    label: Text(
+                                      source.name.length > 20
+                                          ? '${source.name.substring(0, 20)}...'
+                                          : source.name,
+                                    ),
+                                    selected: _selectedSourceId == source.id,
+                                    onSelected: (selected) {
+                                      setState(() {
+                                        _selectedSourceId = selected
+                                            ? source.id
+                                            : null;
+                                      });
+                                    },
+                                    backgroundColor: Colors.white,
+                                    selectedColor: Colors.black87,
+                                    labelStyle: TextStyle(
+                                      color: _selectedSourceId == source.id
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
                                   ),
                                 ),
                               );
