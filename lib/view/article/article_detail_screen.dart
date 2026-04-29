@@ -144,7 +144,7 @@ class ArticleDetailScreen extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 14,
                       height: 1.6,
-                      color: Colors.black87,
+                      color: Colors.white,
                     ),
                   ),
                   const SizedBox(height: 20),

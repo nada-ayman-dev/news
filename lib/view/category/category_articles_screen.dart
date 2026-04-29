@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:news/model/home/news_article.dart';
 import 'package:news/model/home/news_source.dart';
 import 'package:news/services/news_api_service.dart';
 import 'package:news/view/article/article_detail_screen.dart';
 import 'package:news/view/search/search_articles_screen.dart';
+import 'package:news/providers/language_provider.dart';
+import 'package:news/providers/theme_provider.dart';
 import 'package:intl/intl.dart';
 
 class CategoryArticlesScreen extends StatefulWidget {
@@ -57,9 +60,13 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black87,
         elevation: 1,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.menu, color: Colors.white),
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+          ),
         ),
         title: Text(
           widget.category,
@@ -83,6 +90,158 @@ class _CategoryArticlesScreenState extends State<CategoryArticlesScreen> {
             },
           ),
         ],
+      ),
+      drawer: Drawer(
+        width: 269,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: const BoxDecoration(color: Colors.white),
+              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 40),
+              child: Center(
+                child: Container(
+                  width: 269,
+                  height: 166,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'News App',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            ListTile(
+              title: Consumer<LanguageProvider>(
+                builder: (context, languageProvider, child) {
+                  return Row(
+                    children: [
+                      const Icon(Icons.home, size: 24),
+                      const SizedBox(width: 12),
+                      Text(
+                        languageProvider.isArabic
+                            ? 'اذهب للرئيسية'
+                            : 'Go To Home',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ],
+                  );
+                },
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Consumer<ThemeProvider>(
+                builder: (context, themeProvider, child) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.palette, size: 24),
+                          const SizedBox(width: 12),
+                          Text(
+                            'Theme',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<ThemeMode>(
+                        initialValue: themeProvider.themeMode,
+                        items: const [
+                          DropdownMenuItem(
+                            value: ThemeMode.dark,
+                            child: Row(
+                              children: [
+                                Icon(Icons.dark_mode, size: 18),
+                                SizedBox(width: 8),
+                                Text('Dark'),
+                              ],
+                            ),
+                          ),
+                          DropdownMenuItem(
+                            value: ThemeMode.light,
+                            child: Row(
+                              children: [
+                                Icon(Icons.light_mode, size: 18),
+                                SizedBox(width: 8),
+                                Text('Light'),
+                              ],
+                            ),
+                          ),
+                          DropdownMenuItem(
+                            value: ThemeMode.system,
+                            child: Row(
+                              children: [
+                                Icon(Icons.settings_brightness, size: 18),
+                                SizedBox(width: 8),
+                                Text('System'),
+                              ],
+                            ),
+                          ),
+                        ],
+                        onChanged: (mode) {
+                          if (mode != null) {
+                            themeProvider.setThemeMode(mode);
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Consumer<LanguageProvider>(
+                builder: (context, languageProvider, child) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.language, size: 24),
+                          const SizedBox(width: 12),
+                          Text(
+                            languageProvider.isArabic ? 'اللغة' : 'Language',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      DropdownButtonFormField<String>(
+                        initialValue:
+                            languageProvider.currentLocale.languageCode,
+                        items: const [
+                          DropdownMenuItem(value: 'en', child: Text('English')),
+                          DropdownMenuItem(value: 'ar', child: Text('العربية')),
+                        ],
+                        onChanged: (lang) {
+                          if (lang != null) {
+                            languageProvider.setLanguage(lang);
+                          }
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
       body: FutureBuilder<List<dynamic>>(
         future: Future.wait([futureArticles, futureSources]),
